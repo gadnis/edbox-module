@@ -1,0 +1,22 @@
+{
+    "name": "edbox/prestashop-module",
+    "description": "Abstract class to help faster build PrestaShop modules",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Edvinas Gurevicius",
+            "email": "edvinas.gure@gmail.com",
+            "homepage": "https://github.com/gadnis"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+      "php": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Edbox\\PSModule\\EdboxModule": "./src"
+        }
+    }
+}

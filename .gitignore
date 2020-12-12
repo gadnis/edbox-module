@@ -1,0 +1,13 @@
+/vendor
+/log
+/node_modules
+/cache
+tests/php/coverage
+config_*.xml
+.php_cs.cache
+.idea
+.DS_Store
+mix-manifest.json
+composer.lock
+sftp-config.json
+/views/js/vue

@@ -2,7 +2,7 @@
 
 namespace Edbox\PSModule\EdboxModule\Concerns;
 
-use PrestaShop\PrestaShop\Core\Foundation\IoC\Container\ServiceLocator;
+use PrestaShop\PrestaShop\Adapter\ServiceLocator;
 
 trait HasLogger
 {

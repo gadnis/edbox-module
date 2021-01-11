@@ -11,7 +11,7 @@ use AppKernel;
 /**
  * Provides symfony container and container cache clear methods
  */
-class HasContainer
+trait HasContainer
 {
     public function getContainer($enveronment = 'prod')
     {

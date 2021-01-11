@@ -46,9 +46,9 @@ trait HasTabs
             return true;
         }
 
-        // merge all tabs with parent tab if parent not empty
+        // prepend parent tab to the beginning of all tabs array
         if (!empty($this->parentTab)) {
-            $tabs = array_merge($this->parentTab, $tabs);
+            $tabs = array_unshift($tabs, $this->parentTab);
         }
 
         /** @var array (id_lang, iso_code) */

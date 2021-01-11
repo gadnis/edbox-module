@@ -48,7 +48,7 @@ trait HasTabs
 
         // prepend parent tab to the beginning of all tabs array
         if (!empty($this->parentTab)) {
-            $tabs = array_unshift($tabs, $this->parentTab);
+            array_unshift($tabs, $this->parentTab);
         }
 
         /** @var array (id_lang, iso_code) */

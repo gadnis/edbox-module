@@ -5,6 +5,8 @@ use Exception;
 use Language;
 use Validate;
 use Tools;
+use DbQuery;
+use Db;
 use Tab;
 
 /**
@@ -12,6 +14,20 @@ use Tab;
  */
 trait HasTabs
 {
+    /**
+     * Put all tabs inside this tab. If you want to skip this option, than make this property null
+     * @var array
+     */
+    protected $parentTab = [
+        'parent_class_name' => 0,
+        'class_name' => 'EdboxModule',
+        'name' => [
+            'en' => 'Edbox Modules',
+            'lt' => 'Edbox Moduliai',
+        ],
+        'visible' => true,
+    ];
+
     /**
      * The Core is supposed to register the tabs automatically thanks to the getTabs() return.
      * However in 1.7.5 it only works when the module contains a Admin<legacy-controller>Controller file,
@@ -24,6 +40,16 @@ trait HasTabs
     {
         /** @var array */
         $tabs = $this->getTabs();
+
+        // if no tabs defined, we say all good nothing to install so no need to trow error
+        if (empty($tabs)) {
+            return true;
+        }
+
+        // merge all tabs with parent tab if parent not empty
+        if (!empty($this->parentTab)) {
+            $tabs = array_merge($this->parentTab, $tabs);
+        }
 
         /** @var array (id_lang, iso_code) */
         $languages = Language::getIsoIds();
@@ -61,7 +87,7 @@ trait HasTabs
                 $this->validateName($names[$lang['id_lang']]);
             }
 
-            // skip creation if already there, or maybe it is better to delete??
+            // skip creation if already there
             if (Tab::getIdFromClassName($class_name)) {
                 $return &= true;
 
@@ -97,11 +123,56 @@ trait HasTabs
         $return = true;
 
         foreach ($tabs as $tabData) {
-            if (Validate::isLoadedObject($tab = Tab::getInstanceFromClassName($tabData['class_name']))) {
-                $return &= $tab->delete();
-            }
+            $return &= $this->removeTabByClassName($tabData['class_name']);
         }
+
+        // remove parent tab if no tab is using it as a parent tab
+        if (!$this->parentTabHasSubTabs()) {
+            $return &= $this->removeTabByClassName($this->parentTab['class_name']);
+        }
+
         return $return;
+    }
+
+    /**
+     * Check if parent tab has sub tabs
+     *
+     * @return boolean
+     */
+    private function parentTabHasSubTabs()
+    {
+        if (empty($this->parentTab['class_name'])) {
+            return;
+        }
+
+        $className = $this->parentTab['class_name'];
+        $id = Tab::getIdFromClassName($className);
+
+        if (empty($id)) {
+            return;
+        }
+
+        $query = new DbQuery();
+        $query->select('count(*)');
+        $query->from('tab');
+        $query->where('id_parent = ' . (int) $id);
+
+        return (int) Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($query) > 0;
+    }
+
+    /**
+     * Remove tab by class name
+     *
+     * @param  string $className
+     *
+     * @return boolean
+     */
+    private function removeTabByClassName($className)
+    {
+        if (Validate::isLoadedObject($tab = Tab::getInstanceFromClassName($className))) {
+            return $tab->delete();
+        }
+        return true;
     }
 
     /**

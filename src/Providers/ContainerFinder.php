@@ -1,6 +1,6 @@
 <?php
 
-namespace Edbox\PSModule\EdboxModule\Concerns;
+namespace Edbox\PSModule\EdboxModule\Providers;
 
 use PrestaShop\PrestaShop\Adapter\ContainerFinder as PrestaContainerFinder;
 use PrestaShop\PrestaShop\Adapter\ContainerBuilder;
@@ -11,9 +11,9 @@ use AppKernel;
 /**
  * Provides symfony container and container cache clear methods
  */
-trait HasContainer
+class ContainerFinder
 {
-    public function getContainer($enveronment = 'prod')
+    public static function getContainer($enveronment = 'prod')
     {
         // Lets build
         $kernel = new AppKernel($enveronment, _PS_MODE_DEV_);
@@ -23,7 +23,7 @@ trait HasContainer
         return $container;
     }
 
-    public function findContainer()
+    public static function findContainer()
     {
         $context = Context::getContext();
         $containerFinder = new PrestaContainerFinder($context);
@@ -35,7 +35,7 @@ trait HasContainer
         } catch (Exception $e) {
             // Kernel Container is not available
             // Lets build it
-            $container = $this->getContainer();
+            $container = self::getContainer();
         }
 
         return $container;
@@ -46,7 +46,7 @@ trait HasContainer
      *
      * @return nothing
      */
-    public function clearCache($env = 'prod')
+    public static function clearCache($env = 'prod')
     {
         $kernel = new AppKernel($env, true);
         $kernel->boot();

@@ -24,6 +24,11 @@ trait DispatchesHooks
      */
     public function __call($methodName, array $arguments)
     {
+        // do nothing if method does not start with hook string
+        if (strpos($methodName, 'hook') !== 0) {
+            return;
+        }
+
         return $this->getHookDispatcher()->dispatch(
             $methodName,
             !empty($arguments[0]) ? $arguments[0] : []

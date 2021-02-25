@@ -59,7 +59,7 @@ trait HasTabs
 
         foreach ($tabs as $tabData) {
             $id_parent = !empty($tabData['parent_class_name']) ? (int) Tab::getIdFromClassName($tabData['parent_class_name']) : 0;
-            $module = $this->name;
+            $module = isset($tabData['module']) ? $tabData['module'] : $this->name;
             $class_name = $tabData['class_name'];
             $icon = !empty($tabData['icon']) ? $tabData['icon'] : '';
             $active = isset($tabData['visible']) ? (int) $tabData['visible'] : 0;

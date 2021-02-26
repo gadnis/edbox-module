@@ -56,12 +56,19 @@ trait HasTabs
         $languages = Language::getIsoIds();
 
         $return = true;
-        $addIcon = true === Tools::version_compare(_PS_VERSION_, '1.7.0.0', '>=');
 
         foreach ($tabs as $tabData) {
+            $class_name = $tabData['class_name'];
+
+            // skip creation if already there
+            if (Tab::getIdFromClassName($class_name)) {
+                $return &= true;
+
+                continue;
+            }
+
             $id_parent = !empty($tabData['parent_class_name']) ? (int) Tab::getIdFromClassName($tabData['parent_class_name']) : 0;
             $module = isset($tabData['module']) ? $tabData['module'] : $this->name;
-            $class_name = $tabData['class_name'];
             $icon = !empty($tabData['icon']) ? $tabData['icon'] : '';
             $active = isset($tabData['visible']) ? (int) $tabData['visible'] : 0;
 
@@ -88,21 +95,13 @@ trait HasTabs
                 $this->validateName($names[$lang['id_lang']]);
             }
 
-            // skip creation if already there
-            if (Tab::getIdFromClassName($class_name)) {
-                $return &= true;
-
-                continue;
-            }
-
             $tab = new Tab();
             $tab->id_parent = $id_parent;
             $tab->module = $module;
             $tab->class_name = $class_name;
             $tab->active = $active;
             $tab->name = $names;
-
-            if ($addIcon) {
+            if (property_exists($tab, 'icon')) {
                 $tab->icon = $icon;
             }
 

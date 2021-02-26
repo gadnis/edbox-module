@@ -19,12 +19,13 @@ trait HasTabs
      * @var array
      */
     protected $parentTab = [
-        'parent_class_name' => 0,
         'class_name' => 'EdboxModule',
+        'parent_class_name' => 0,
         'name' => [
             'en' => 'Edbox Modules',
             'lt' => 'Edbox Moduliai',
         ],
+        'module' => '',
         'visible' => true,
     ];
 

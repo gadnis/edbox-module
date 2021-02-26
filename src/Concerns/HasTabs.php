@@ -66,8 +66,8 @@ trait HasTabs
 
                 continue;
             }
-
-            $id_parent = !empty($tabData['parent_class_name']) ? (int) Tab::getIdFromClassName($tabData['parent_class_name']) : 0;
+            $parent = isset($tabData['parent_class_name']) ? $tabData['parent_class_name'] : 0;
+            $id_parent = is_int($parent) ? $parent : Tab::getIdFromClassName($parent);
             $module = isset($tabData['module']) ? $tabData['module'] : $this->name;
             $icon = !empty($tabData['icon']) ? $tabData['icon'] : '';
             $active = isset($tabData['visible']) ? (int) $tabData['visible'] : 0;

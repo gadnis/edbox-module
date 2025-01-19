@@ -6,6 +6,6 @@
  * YOU ARE NOT AUTHORIZED TO INSTALL, COPY, OR OTHERWISE USE THE SOFTWARE PRODUCT.
  *
  *  @author    EDBOX <edbox.code@gmail.com>
- *  @copyright 2020 EDBOX. All rights reserved.
+ *  @copyright 2024 EDBOX. All rights reserved.
  *  @license   private
  */
